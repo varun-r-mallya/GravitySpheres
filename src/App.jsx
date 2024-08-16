@@ -10,17 +10,36 @@ function App() {
       { id: "Node 3", color: "#0000ff" },
     ],
     links: [
-      { source: "Node 1", target: "Node 2", color: "#ffffff", id: "Link 1" },
-      { source: "Node 2", target: "Node 3", color: "#ffffff", id: "Link 2" },
-      { source: "Node 3", target: "Node 1", color: "#ffffff", id: "Link 3" },
+      {
+        source: "Node 1",
+        target: "Node 2",
+        color: "#ffffff",
+        id: "Link 1",
+        directed: true,
+      },
+      {
+        source: "Node 2",
+        target: "Node 3",
+        color: "#ffffff",
+        id: "Link 2",
+        directed: true,
+      },
+      {
+        source: "Node 3",
+        target: "Node 1",
+        color: "#ffffff",
+        id: "Link 3",
+        directed: true,
+      },
     ],
   };
+
   const [graphData, setGraphData] = useState(GraphData);
   const [clickedNode, setClickedNode] = useState(null);
   const [node1, setNode1] = useState(null);
   const [node2, setNode2] = useState(null);
   const [linkRemove, setLinkRemove] = useState(null);
-  const [nodeRemove, setNodeRemove] = useState(null);
+  const [directed, setDirected] = useState(true);
   const [doubleClickedNode, setDoubleClickedNode] = useState(false);
 
   useEffect(() => {
@@ -45,7 +64,8 @@ function App() {
         source: node1.id,
         target: node2.id,
         color: "#8301DF",
-        id: `Link ${node1.id} & ${node2.id}`,
+        id: `Link ${node1.id} to ${node2.id}`,
+        directed: directed,
       };
       const updatedGraphData = {
         nodes: graphData.nodes,
@@ -68,6 +88,7 @@ function App() {
         target: newNode.id,
         color: "#8301DF",
         id: `Link ${graphData.links.length + 1}`,
+        directed: directed,
       };
       const updatedGraphData = {
         nodes: [...graphData.nodes, newNode],

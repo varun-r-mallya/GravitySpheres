@@ -15,7 +15,6 @@ const GraphView = ({ data, clicker, linkRemove }) => {
     fg.d3Force("collide", d3.forceCollide().radius(10)); // Adjusted radius to reduce overlap
   }, []);
 
-  
   return (
     <div style={{ position: "relative" }}>
       <ForceGraph2D
@@ -52,12 +51,44 @@ const GraphView = ({ data, clicker, linkRemove }) => {
           }
         }}
         linkCanvasObject={(link, ctx) => {
-          //draw the link here
           ctx.beginPath();
           ctx.moveTo(link.source.x, link.source.y);
           ctx.lineTo(link.target.x, link.target.y);
           ctx.strokeStyle = link.color || "gray";
           ctx.stroke();
+
+          // Check if the link is directed
+          if (link.directed) {
+            const headlen = 10; // Length of the arrowhead in pixels
+            const angle = Math.atan2(
+              link.target.y - link.source.y,
+              link.target.x - link.source.x
+            );
+            const offset = headlen; // Move arrowhead back by this distance
+
+            // Calculate new target coordinates for arrowhead
+            const arrowX = link.target.x - offset * Math.cos(angle);
+            const arrowY = link.target.y - offset * Math.sin(angle);
+
+            // Draw an arrowhead
+            ctx.beginPath();
+            ctx.moveTo(arrowX, arrowY);
+            ctx.lineTo(
+              arrowX - headlen * Math.cos(angle - Math.PI / 6),
+              arrowY - headlen * Math.sin(angle - Math.PI / 6)
+            );
+            ctx.lineTo(
+              arrowX - headlen * Math.cos(angle + Math.PI / 6),
+              arrowY - headlen * Math.sin(angle + Math.PI / 6)
+            );
+            ctx.lineTo(arrowX, arrowY);
+            ctx.lineTo(
+              arrowX - headlen * Math.cos(angle - Math.PI / 6),
+              arrowY - headlen * Math.sin(angle - Math.PI / 6)
+            );
+            ctx.fillStyle = link.color || "gray";
+            ctx.fill();
+          }
 
           if (hoveredLink && hoveredLink.id === link.id) {
             // console.log("hovered link", hoveredLink);
