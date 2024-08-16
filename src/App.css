@@ -39,9 +39,9 @@
 
 .buttondiv {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  padding: 10px;
+  top: 2%;
+  right: 2%;
+  padding: 1%;
   border: none;
   border-radius: 5px;
 }

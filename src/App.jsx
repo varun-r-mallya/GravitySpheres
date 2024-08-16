@@ -106,6 +106,10 @@ function App() {
     setNode2(null);
     setDoubleClickedNode(!doubleClickedNode);
   };
+  const resetState = () => {
+    setNode1(null);
+    setNode2(null);
+  };
 
   return (
     <div className="App">
@@ -122,11 +126,19 @@ function App() {
           onClick={clickHandler}
           style={{ backgroundColor: doubleClickedNode ? "#00ff00" : "#ff0000" }}
         >
-          Connect
+          Connect Nodes
         </button>
         <button onClick={orphanNodeAdd}>Orphan Node</button>
-        {(node1 || node2) && <h4> Selected: {node1 && node1.id} {node2 && `and`} {node2 && node2.id} </h4>}
-        {node1 && node2 && "Now click any node to connect"}
+        {(node1 || node2) && (
+          <h4>
+            {" "}
+            Selected: {node1 && node1.id} {node2 && `and`} {node2 && node2.id}{" "}
+          </h4>
+        )}
+        <div style={{ display: "flex" }}>
+          {node1 && node2 && <button onClick={handleAddNode}>Connect</button>}
+          {(node1 || node2) && <button onClick={resetState}>Cancel</button>}
+        </div>
       </div>
     </div>
   );
