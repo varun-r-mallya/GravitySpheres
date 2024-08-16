@@ -2,6 +2,10 @@ import React, { useRef, useState, useEffect } from "react";
 import { ForceGraph2D } from "react-force-graph"; // Adjusted import statement
 import * as d3 from "d3-force";
 
+function minimum(a, b) {
+  return a < b ? a : b;
+}
+
 const GraphView = ({ data, clicker, linkRemove }) => {
   const fgRef = useRef();
   const [hoveredNode, setHoveredNode] = useState(null);
@@ -10,7 +14,7 @@ const GraphView = ({ data, clicker, linkRemove }) => {
   useEffect(() => {
     const fg = fgRef.current;
 
-    fg.d3Force("link").distance(60); // Adjusted distance for better spacing
+    fg.d3Force("link").distance(100); // Adjusted distance for better spacing
     fg.d3Force("charge").strength(-100); // Adjusted repulsion for more cohesive nodes
     fg.d3Force("collide", d3.forceCollide().radius(10)); // Adjusted radius to reduce overlap
   }, []);
@@ -20,7 +24,6 @@ const GraphView = ({ data, clicker, linkRemove }) => {
       <ForceGraph2D
         ref={fgRef}
         graphData={data}
-        linkWidth={(link) => link.value || 2} // Set link width
         linkColor={(link) => link.color || "gray"} // Set link color
         nodeAutoColorBy="id"
         nodeCanvasObject={(node, ctx) => {
@@ -55,16 +58,16 @@ const GraphView = ({ data, clicker, linkRemove }) => {
           ctx.moveTo(link.source.x, link.source.y);
           ctx.lineTo(link.target.x, link.target.y);
           ctx.strokeStyle = link.color || "gray";
+          ctx.lineWidth = 1; // Set individual link width
           ctx.stroke();
 
           // Check if the link is directed
           if (link.directed) {
-            const headlen = 10; // Length of the arrowhead in pixels
             const angle = Math.atan2(
               link.target.y - link.source.y,
               link.target.x - link.source.x
             );
-            const offset = headlen; // Move arrowhead back by this distance
+            const offset = 10; // Move arrowhead back by this distance
 
             // Calculate new target coordinates for arrowhead
             const arrowX = link.target.x - offset * Math.cos(angle);
@@ -72,19 +75,22 @@ const GraphView = ({ data, clicker, linkRemove }) => {
 
             // Draw an arrowhead
             ctx.beginPath();
+            const arrowWidth = 9; // Set individual link width
+            const arrowHeight = arrowWidth; // Calculate arrowhead height based on link width
+
             ctx.moveTo(arrowX, arrowY);
             ctx.lineTo(
-              arrowX - headlen * Math.cos(angle - Math.PI / 6),
-              arrowY - headlen * Math.sin(angle - Math.PI / 6)
+              arrowX - arrowHeight * Math.cos(angle - Math.PI / 6),
+              arrowY - arrowHeight * Math.sin(angle - Math.PI / 6)
             );
             ctx.lineTo(
-              arrowX - headlen * Math.cos(angle + Math.PI / 6),
-              arrowY - headlen * Math.sin(angle + Math.PI / 6)
+              arrowX - arrowHeight * Math.cos(angle + Math.PI / 6),
+              arrowY - arrowHeight * Math.sin(angle + Math.PI / 6)
             );
             ctx.lineTo(arrowX, arrowY);
             ctx.lineTo(
-              arrowX - headlen * Math.cos(angle - Math.PI / 6),
-              arrowY - headlen * Math.sin(angle - Math.PI / 6)
+              arrowX - arrowHeight * Math.cos(angle - Math.PI / 6),
+              arrowY - arrowHeight * Math.sin(angle - Math.PI / 6)
             );
             ctx.fillStyle = link.color || "gray";
             ctx.fill();
@@ -100,7 +106,7 @@ const GraphView = ({ data, clicker, linkRemove }) => {
             ctx.fillStyle = "yellow";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
-            ctx.fillText(link.id, middleX, middleY);
+            ctx.fillText(link.id + " (" + link.weight + ")", middleX, middleY);
           }
         }}
         linkDirectionalParticles={0} // No particles in 2D

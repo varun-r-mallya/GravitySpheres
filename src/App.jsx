@@ -16,6 +16,7 @@ function App() {
         color: "#ffffff",
         id: "Link 1",
         directed: true,
+        weight: 1,
       },
       {
         source: "Node 2",
@@ -23,6 +24,7 @@ function App() {
         color: "#ffffff",
         id: "Link 2",
         directed: true,
+        weight: 1,
       },
       {
         source: "Node 3",
@@ -30,6 +32,7 @@ function App() {
         color: "#ffffff",
         id: "Link 3",
         directed: true,
+        weight: 1,
       },
     ],
   };
@@ -41,6 +44,8 @@ function App() {
   const [linkRemove, setLinkRemove] = useState(null);
   const [directed, setDirected] = useState(true);
   const [doubleClickedNode, setDoubleClickedNode] = useState(false);
+  const [weighted, setWeighted] = useState(false);
+  const [weight, setWeight] = useState(111);
 
   useEffect(() => {
     let x = clickedNode;
@@ -58,7 +63,6 @@ function App() {
   }, [linkRemove]);
 
   const connectHandle = () => {
-    console.log(node1, node2, "logged");
     if (node1 && node2) {
       const newLink = {
         source: node1.id,
@@ -66,6 +70,7 @@ function App() {
         color: "#8301DF",
         id: `Link ${node1.id} to ${node2.id}`,
         directed: directed,
+        weight: weight,
       };
       const updatedGraphData = {
         nodes: graphData.nodes,
@@ -89,6 +94,7 @@ function App() {
         color: "#8301DF",
         id: `Link ${graphData.links.length + 1}`,
         directed: directed,
+        weight: weight,
       };
       const updatedGraphData = {
         nodes: [...graphData.nodes, newNode],
@@ -141,21 +147,42 @@ function App() {
       />
       <div
         className="buttondiv"
-        style={{ display: "flex", flexDirection: "column"}}
+        style={{ display: "flex", flexDirection: "column" }}
       >
         <button
           onClick={clickHandler}
-          style={{ backgroundColor: doubleClickedNode ? "#00ff00" : "#ff0000", marginBottom: "10px" }}
+          style={{
+            backgroundColor: doubleClickedNode ? "#00ff00" : "#ff0000",
+            marginBottom: "10px",
+          }}
         >
           Connect Nodes
         </button>
         <button
-          onClick={directed ? () => setDirected(false) : () => setDirected(true)}
-          style={{ backgroundColor: directed ? "#00ff00" : "#ff0000", marginBottom: "10px" }}
+          onClick={
+            directed ? () => setDirected(false) : () => setDirected(true)
+          }
+          style={{
+            backgroundColor: directed ? "#00ff00" : "#ff0000",
+            marginBottom: "10px",
+          }}
         >
           Directed
         </button>
-        <button onClick={orphanNodeAdd} style={{ marginBottom: "10px" }}>Orphan Node</button>
+        <button
+          onClick={
+            weighted ? () => setWeighted(false) : () => setWeighted(true)
+          }
+          style={{
+            backgroundColor: weighted ? "#00ff00" : "#ff0000",
+            marginBottom: "10px",
+          }}
+        >
+          Weighted
+        </button>
+        <button onClick={orphanNodeAdd} style={{ marginBottom: "10px" }}>
+          Orphan Node
+        </button>
         {(node1 || node2) && (
           <h4>
             {" "}
@@ -164,7 +191,19 @@ function App() {
         )}
         <div style={{ display: "flex" }}>
           {node1 && node2 && <button onClick={handleAddNode}>Connect</button>}
-          {(node1 || node2) && <button onClick={resetState} style={{ marginLeft: "10px" }}>Cancel</button>}
+          {weighted && node1 && node2 && (
+            <input
+              type="number"
+              value={weight}
+              onChange={(e) => setWeight((e.target.value))}
+              style={{ marginBottom: "10px" }}
+            />
+          )}
+          {(node1 || node2) && (
+            <button onClick={resetState} style={{ marginLeft: "10px" }}>
+              Cancel
+            </button>
+          )}
         </div>
       </div>
     </div>
