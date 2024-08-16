@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { ForceGraph2D } from "react-force-graph"; // Adjusted import statement
 import * as d3 from "d3-force";
 
-const GraphView = ({ data, clicker }) => {
+const GraphView = ({ data, clicker, linkRemove }) => {
   const fgRef = useRef();
   const [hoveredNode, setHoveredNode] = useState(null);
   const [hoveredLink, setHoveredLink] = useState(null);
@@ -11,10 +11,11 @@ const GraphView = ({ data, clicker }) => {
     const fg = fgRef.current;
 
     fg.d3Force("link").distance(60); // Adjusted distance for better spacing
-    fg.d3Force("charge").strength(-200); // Adjusted repulsion for more cohesive nodes
-    fg.d3Force("collide", d3.forceCollide().radius(6)); // Adjusted radius to reduce overlap
+    fg.d3Force("charge").strength(-100); // Adjusted repulsion for more cohesive nodes
+    fg.d3Force("collide", d3.forceCollide().radius(10)); // Adjusted radius to reduce overlap
   }, []);
 
+  
   return (
     <div style={{ position: "relative" }}>
       <ForceGraph2D
@@ -72,10 +73,14 @@ const GraphView = ({ data, clicker }) => {
           }
         }}
         linkDirectionalParticles={0} // No particles in 2D
-        // onLinkClick={(link) => console.log("Link clicked:", link)}
+        onLinkClick={(link) => {
+          linkRemove(link);
+        }}
         onLinkHover={(link) => setHoveredLink(link)} // Update hovered link state
         onNodeHover={(node) => setHoveredNode(node)} // Update hovered node state
-        onNodeClick={(node) => {clicker(node); node.color = "#000000" }} // For debugging purposes
+        onNodeClick={(node) => {
+          clicker(node);
+        }}
       />
     </div>
   );

@@ -19,7 +19,24 @@ function App() {
   const [clickedNode, setClickedNode] = useState(null);
   const [node1, setNode1] = useState(null);
   const [node2, setNode2] = useState(null);
+  const [linkRemove, setLinkRemove] = useState(null);
+  const [nodeRemove, setNodeRemove] = useState(null);
   const [doubleClickedNode, setDoubleClickedNode] = useState(false);
+
+  useEffect(() => {
+    let x = clickedNode;
+    setClickedNode(null);
+    if (x != null) handleAddNode(x);
+  }, [clickedNode]);
+
+  useEffect(() => {
+    let x = linkRemove;
+    setLinkRemove(null);
+    if (x != null) {
+      let newLinks = graphData.links.filter((link) => link.id !== x.id);
+      setGraphData({ nodes: graphData.nodes, links: newLinks });
+    }
+  }, [linkRemove]);
 
   const connectHandle = () => {
     console.log(node1, node2, "logged");
@@ -28,6 +45,7 @@ function App() {
         source: node1.id,
         target: node2.id,
         color: "#8301DF",
+        id: `Link ${node1.id} & ${node2.id}`,
       };
       const updatedGraphData = {
         nodes: graphData.nodes,
@@ -43,12 +61,13 @@ function App() {
       const newNode = {
         id: `Node ${graphData.nodes.length + 1}`,
         size: 10,
-        color: "#FFFFFF",
+        color: "#56ABDE",
       };
       const newLink = {
         source: x ? x.id : graphData.nodes[0].id,
         target: newNode.id,
         color: "#8301DF",
+        id: `Link ${graphData.links.length + 1}`,
       };
       const updatedGraphData = {
         nodes: [...graphData.nodes, newNode],
@@ -59,32 +78,56 @@ function App() {
       if (node1 === null) {
         setNode1(x);
       } else {
-        setNode2(x);
-        if (node1 === node2) {
-          setNode1(null);
-          setNode2(null);
-        }
-        if (node1 && node2) {
-          connectHandle();
+        if (node1.id != x.id) {
+          setNode2(x);
+          if (node1 && node2) {
+            connectHandle();
+          }
         }
       }
     }
   };
 
+  const orphanNodeAdd = () => {
+    const newNode = {
+      id: `Node ${graphData.nodes.length + 1}`,
+      size: 10,
+      color: "#56ABDE",
+    };
+    const updatedGraphData = {
+      nodes: [...graphData.nodes, newNode],
+      links: graphData.links,
+    };
+    setGraphData(updatedGraphData);
+  };
+
   const clickHandler = () => {
+    setNode1(null);
+    setNode2(null);
     setDoubleClickedNode(!doubleClickedNode);
   };
 
-  useEffect(() => {
-    let x = clickedNode;
-    setClickedNode(null);
-    if (x != null) handleAddNode(x);
-  }, [clickedNode]);
-
   return (
     <div className="App">
-      <GraphView data={graphData} clicker={setClickedNode} />
-      <button onClick={clickHandler}>Connect</button>
+      <GraphView
+        data={graphData}
+        clicker={setClickedNode}
+        linkRemove={setLinkRemove}
+      />
+      <div
+        className="buttondiv"
+        style={{ display: "flex", flexDirection: "column" }}
+      >
+        <button
+          onClick={clickHandler}
+          style={{ backgroundColor: doubleClickedNode ? "#00ff00" : "#ff0000" }}
+        >
+          Connect
+        </button>
+        <button onClick={orphanNodeAdd}>Orphan Node</button>
+        {(node1 || node2) && <h4> Selected: {node1 && node1.id} {node2 && `and`} {node2 && node2.id} </h4>}
+        {node1 && node2 && "Now click any node to connect"}
+      </div>
     </div>
   );
 }
