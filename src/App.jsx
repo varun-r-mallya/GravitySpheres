@@ -141,15 +141,21 @@ function App() {
       />
       <div
         className="buttondiv"
-        style={{ display: "flex", flexDirection: "column" }}
+        style={{ display: "flex", flexDirection: "column"}}
       >
         <button
           onClick={clickHandler}
-          style={{ backgroundColor: doubleClickedNode ? "#00ff00" : "#ff0000" }}
+          style={{ backgroundColor: doubleClickedNode ? "#00ff00" : "#ff0000", marginBottom: "10px" }}
         >
           Connect Nodes
         </button>
-        <button onClick={orphanNodeAdd}>Orphan Node</button>
+        <button
+          onClick={directed ? () => setDirected(false) : () => setDirected(true)}
+          style={{ backgroundColor: directed ? "#00ff00" : "#ff0000", marginBottom: "10px" }}
+        >
+          Directed
+        </button>
+        <button onClick={orphanNodeAdd} style={{ marginBottom: "10px" }}>Orphan Node</button>
         {(node1 || node2) && (
           <h4>
             {" "}
@@ -158,7 +164,7 @@ function App() {
         )}
         <div style={{ display: "flex" }}>
           {node1 && node2 && <button onClick={handleAddNode}>Connect</button>}
-          {(node1 || node2) && <button onClick={resetState}>Cancel</button>}
+          {(node1 || node2) && <button onClick={resetState} style={{ marginLeft: "10px" }}>Cancel</button>}
         </div>
       </div>
     </div>
