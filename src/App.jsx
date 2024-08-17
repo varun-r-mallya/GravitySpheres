@@ -5,33 +5,30 @@ import GraphView from "./Graphview";
 function App() {
   let GraphData = {
     nodes: [
-      { id: "Node 1", color: "#ff0000" },
-      { id: "Node 2", color: "#00ff00" },
-      { id: "Node 3", color: "#0000ff" },
+      { id: "[1]"},
+      { id: "[2]"},
+      { id: "[3]"},
     ],
     links: [
       {
-        source: "Node 1",
-        target: "Node 2",
-        color: "#ffffff",
+        source: "[1]",
+        target: "[2]",
         id: "Link 1",
-        directed: true,
+        directed: false,
         weight: 1,
       },
       {
-        source: "Node 2",
-        target: "Node 3",
-        color: "#ffffff",
+        source: "[2]",
+        target: "[3]",
         id: "Link 2",
-        directed: true,
+        directed: false,
         weight: 1,
       },
       {
-        source: "Node 3",
-        target: "Node 1",
-        color: "#ffffff",
+        source: "[3]",
+        target: "[1]",
         id: "Link 3",
-        directed: true,
+        directed: false,
         weight: 1,
       },
     ],
@@ -42,10 +39,10 @@ function App() {
   const [node1, setNode1] = useState(null);
   const [node2, setNode2] = useState(null);
   const [linkRemove, setLinkRemove] = useState(null);
-  const [directed, setDirected] = useState(true);
+  const [directed, setDirected] = useState(false);
   const [doubleClickedNode, setDoubleClickedNode] = useState(false);
   const [weighted, setWeighted] = useState(false);
-  const [weight, setWeight] = useState(111);
+  const [weight, setWeight] = useState(1);
 
   useEffect(() => {
     let x = clickedNode;
@@ -67,8 +64,7 @@ function App() {
       const newLink = {
         source: node1.id,
         target: node2.id,
-        color: "#8301DF",
-        id: `Link ${node1.id} to ${node2.id}`,
+        id: `Link (${graphData.links.length + 1})`,
         directed: directed,
         weight: weight,
       };
@@ -84,14 +80,12 @@ function App() {
   const handleAddNode = (x) => {
     if (!doubleClickedNode) {
       const newNode = {
-        id: `Node ${graphData.nodes.length + 1}`,
+        id: `[${graphData.nodes.length + 1}]`,
         size: 10,
-        color: "#56ABDE",
       };
       const newLink = {
         source: x ? x.id : graphData.nodes[0].id,
         target: newNode.id,
-        color: "#8301DF",
         id: `Link ${graphData.links.length + 1}`,
         directed: directed,
         weight: weight,
@@ -117,9 +111,8 @@ function App() {
 
   const orphanNodeAdd = () => {
     const newNode = {
-      id: `Node ${graphData.nodes.length + 1}`,
+      id: `[${graphData.nodes.length + 1}]`,
       size: 10,
-      color: "#56ABDE",
     };
     const updatedGraphData = {
       nodes: [...graphData.nodes, newNode],
@@ -147,46 +140,35 @@ function App() {
       />
       <div
         className="buttondiv"
-        style={{ display: "flex", flexDirection: "column" }}
       >
         <button
           onClick={clickHandler}
-          style={{
-            backgroundColor: doubleClickedNode ? "#00ff00" : "#ff0000",
-            marginBottom: "10px",
-          }}
+          className={`controls ${doubleClickedNode ? 'on' : ''}`}
         >
           Connect Nodes
         </button>
         <button
-          onClick={
-            directed ? () => setDirected(false) : () => setDirected(true)
-          }
-          style={{
-            backgroundColor: directed ? "#00ff00" : "#ff0000",
-            marginBottom: "10px",
-          }}
+          onClick={() => setDirected(!directed)}
+          className={`controls ${directed ? 'on' : ''}`}
         >
           Directed
         </button>
         <button
-          onClick={
-            weighted ? () => setWeighted(false) : () => setWeighted(true)
-          }
-          style={{
-            backgroundColor: weighted ? "#00ff00" : "#ff0000",
-            marginBottom: "10px",
-          }}
+          onClick={() => setWeighted(!weighted)}
+          className={`controls ${weighted ? 'on' : ''}`}
         >
           Weighted
         </button>
-        <button onClick={orphanNodeAdd} style={{ marginBottom: "10px" }}>
+        <button
+          onClick={orphanNodeAdd}
+          className="controls"
+        >
           Orphan Node
         </button>
         {(node1 || node2) && (
           <h4>
             {" "}
-            Selected: {node1 && node1.id} {node2 && `and`} {node2 && node2.id}{" "}
+            Edge from: {node1 && node1.id} {node2 && `to:`} {node2 && node2.id}{" "}
           </h4>
         )}
         <div style={{ display: "flex" }}>

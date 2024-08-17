@@ -13,28 +13,30 @@
 }
 
 .controls {
-  position: absolute;
-  top: 20px;
-  left: 20px;
   z-index: 10;
-  background: white;
+  background-color: #fceaff;
   padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  margin-bottom: 5px;
+  color: black;
+  transition: all 0.3s ease, transform 0.3s ease;
 }
 
-.controls button {
-  margin: 5px;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
+.controls:hover {
+  background-color: #a78fc3;
+  outline: none;
+  transform: scale(1.05);
 }
 
-.controls button:hover {
-  background-color: #0056b3;
+.controls:active {
+  transform: scale(0.95);
+}
+
+.controls.on {
+  background-color: #7b49cc;
+}
+
+.controls:focus {
+  outline: none;
 }
 
 .buttondiv {
@@ -44,4 +46,6 @@
   padding: 1%;
   border: none;
   border-radius: 5px;
+  display: flex;
+  flex-direction: column;
 }
