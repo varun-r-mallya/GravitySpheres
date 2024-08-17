@@ -34,7 +34,7 @@ const GraphView = ({ data, clicker, linkRemove }) => {
         graphData={data}
         nodeCanvasObject={(node, ctx) => {
           const baseRadius = 10;
-          const hoverRadius = 15; // Increase radius on hover
+          const hoverRadius = 12; // Increase radius on hover
 
           const radius = hoveredNode && hoveredNode.id === node.id ? hoverRadius : baseRadius;
 
@@ -54,6 +54,14 @@ const GraphView = ({ data, clicker, linkRemove }) => {
             ctx.textBaseline = "middle";
             ctx.fillText(node.id, node.x, node.y);
           }
+        }}
+        nodePointerAreaPaint={(node, color, ctx) => {
+          const detectionRadius = 12; // Increase hover detection radius
+
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, detectionRadius, 0, 2 * Math.PI, false);
+          ctx.fill();
         }}
         linkCanvasObject={(link, ctx) => {
           ctx.beginPath();
