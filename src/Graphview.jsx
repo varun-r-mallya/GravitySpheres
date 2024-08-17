@@ -1,10 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
-import { ForceGraph2D } from "react-force-graph"; // Adjusted import statement
+import { ForceGraph2D } from "react-force-graph";
 import * as d3 from "d3-force";
-
-function minimum(a, b) {
-  return a < b ? a : b;
-}
 
 const notVisitedColor = "#fceaff";
 const visitedColor = "#a78fc3";
@@ -19,10 +15,17 @@ const GraphView = ({ data, clicker, linkRemove }) => {
   useEffect(() => {
     const fg = fgRef.current;
 
-    fg.d3Force("link").distance(100); // Adjusted distance for better spacing
-    fg.d3Force("charge").strength(-100); // Adjusted repulsion for more cohesive nodes
-    fg.d3Force("collide", d3.forceCollide().radius(10)); // Adjusted radius to reduce overlap
-  }, []);
+    // Set link distance based on the link weight
+    fg.d3Force("link").distance((link) => {
+      const minDistance = 50; // Set a base minimum distance
+      const maxDistance = 200; // Set a maximum distance for very light links
+      const distance = minDistance * (link.weight || 1); // Inverse proportional to weight
+      return Math.min(maxDistance, distance); // Ensure the distance is not below the minimum
+    });
+
+    fg.d3Force("charge").strength(-100);
+    fg.d3Force("collide", d3.forceCollide().radius(10));
+  }, [data]); // Re-run effect if data changes
 
   return (
     <div style={{ position: "relative" }}>
@@ -31,23 +34,20 @@ const GraphView = ({ data, clicker, linkRemove }) => {
         graphData={data}
         nodeCanvasObject={(node, ctx) => {
           const radius = 10;
-          const hoverRadius = radius * 1.5; // Increased hover area radius
+          const hoverRadius = radius * 1.5;
 
-          // Draw the larger circle for hover detection
           ctx.beginPath();
           ctx.arc(node.x, node.y, hoverRadius, 0, 2 * Math.PI, false);
-          ctx.strokeStyle = "rgba(0,0,0,0)"; // Transparent stroke for hover detection
-          ctx.lineWidth = 1; // Set line width to ensure detection
+          ctx.strokeStyle = "rgba(0,0,0,0)";
+          ctx.lineWidth = 1;
           ctx.stroke();
 
-          // Draw the actual node
           ctx.beginPath();
           ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
           ctx.fillStyle = notVisitedColor;
           ctx.fill();
-          // Draw node label inside the node only if it is hovered
+
           if (hoveredNode && hoveredNode.id === node.id) {
-            // Change node style
             ctx.fillStyle = hoverColor;
             ctx.fill();
 
@@ -63,25 +63,22 @@ const GraphView = ({ data, clicker, linkRemove }) => {
           ctx.moveTo(link.source.x, link.source.y);
           ctx.lineTo(link.target.x, link.target.y);
           ctx.strokeStyle = linkColor;
-          ctx.lineWidth = 1; // Set individual link width
+          ctx.lineWidth = 1;
           ctx.stroke();
 
-          // Check if the link is directed
           if (link.directed) {
             const angle = Math.atan2(
               link.target.y - link.source.y,
               link.target.x - link.source.x
             );
-            const offset = 10; // Move arrowhead back by this distance
+            const offset = 10;
 
-            // Calculate new target coordinates for arrowhead
             const arrowX = link.target.x - offset * Math.cos(angle);
             const arrowY = link.target.y - offset * Math.sin(angle);
 
-            // Draw an arrowhead
             ctx.beginPath();
-            const arrowWidth = 9; // Set individual link width
-            const arrowHeight = arrowWidth; // Calculate arrowhead height based on link width
+            const arrowWidth = 9;
+            const arrowHeight = arrowWidth;
 
             ctx.moveTo(arrowX, arrowY);
             ctx.lineTo(
@@ -113,12 +110,12 @@ const GraphView = ({ data, clicker, linkRemove }) => {
             ctx.fillText("(" + link.weight + ")", middleX, middleY);
           }
         }}
-        linkDirectionalParticles={0} // No particles in 2D
+        linkDirectionalParticles={0}
         onLinkClick={(link) => {
           linkRemove(link);
         }}
-        onLinkHover={(link) => setHoveredLink(link)} // Update hovered link state
-        onNodeHover={(node) => setHoveredNode(node)} // Update hovered node state
+        onLinkHover={(link) => setHoveredLink(link)}
+        onNodeHover={(node) => setHoveredNode(node)}
         onNodeClick={(node) => {
           clicker(node);
         }}
