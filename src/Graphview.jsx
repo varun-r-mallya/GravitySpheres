@@ -4,7 +4,7 @@ import * as d3 from "d3-force";
 
 const notVisitedColor = "#fceaff";
 const visitedColor = "#a78fc3";
-const hoverColor = "#7b49cc";
+const hoverColor = "#a6f5d3";
 const linkColor = "#64baaa";
 
 const GraphView = ({ data, clicker, linkRemove }) => {
@@ -17,15 +17,15 @@ const GraphView = ({ data, clicker, linkRemove }) => {
 
     // Set link distance based on the link weight
     fg.d3Force("link").distance((link) => {
-      const minDistance = 50; // Set a base minimum distance
-      const maxDistance = 200; // Set a maximum distance for very light links
-      const distance = minDistance * (link.weight || 1); // Inverse proportional to weight
-      return Math.min(maxDistance, distance); // Ensure the distance is not below the minimum
+      const minDistance = 50;
+      const maxDistance = 200;
+      const distance = minDistance * (link.weight || 1);
+      return Math.min(maxDistance, distance);
     });
 
     fg.d3Force("charge").strength(-100);
     fg.d3Force("collide", d3.forceCollide().radius(10));
-  }, [data]); // Re-run effect if data changes
+  }, [data]);
 
   return (
     <div style={{ position: "relative" }}>
@@ -33,29 +33,26 @@ const GraphView = ({ data, clicker, linkRemove }) => {
         ref={fgRef}
         graphData={data}
         nodeCanvasObject={(node, ctx) => {
-          const radius = 10;
-          const hoverRadius = radius * 1.5;
+          const baseRadius = 10;
+          const hoverRadius = 15; // Increase radius on hover
 
-          ctx.beginPath();
-          ctx.arc(node.x, node.y, hoverRadius, 0, 2 * Math.PI, false);
-          ctx.strokeStyle = "rgba(0,0,0,0)";
-          ctx.lineWidth = 1;
-          ctx.stroke();
+          const radius = hoveredNode && hoveredNode.id === node.id ? hoverRadius : baseRadius;
 
           ctx.beginPath();
           ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
           ctx.fillStyle = notVisitedColor;
           ctx.fill();
 
+          // Display label if node is hovered
           if (hoveredNode && hoveredNode.id === node.id) {
             ctx.fillStyle = hoverColor;
             ctx.fill();
 
             ctx.font = "10px Arial";
-            ctx.fillStyle = "white";
+            ctx.fillStyle = "#7444db";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
-            ctx.fillText(node.id, node.x, node.y - hoverRadius);
+            ctx.fillText(node.id, node.x, node.y);
           }
         }}
         linkCanvasObject={(link, ctx) => {
