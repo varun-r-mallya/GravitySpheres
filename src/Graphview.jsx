@@ -28,7 +28,7 @@ const GraphView = ({ data, clicker, linkRemove }) => {
   }, [data]);
 
   return (
-    <div style={{ position: "relative" }}>
+    <div>
       <ForceGraph2D
         ref={fgRef}
         graphData={data}

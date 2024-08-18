@@ -1,0 +1,41 @@
+.BlogHeading {
+    background-color: ivory;
+    height: 100vh;
+    position: relative;
+    min-height: 500px;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: row;
+}
+
+.inner {
+    width: 50%;
+    top: 50%;
+    position: absolute;
+    text-align: center;
+    z-index: 1;
+    transform: translateY(-50%);
+}
+
+.top {
+    color: #000;
+    font-weight: 100;
+    font-size: 23px;
+}
+
+.bottom {
+    display: block;
+    font-weight: normal;
+    font-size: 40px;
+}
+
+.chart {
+    width: 50%;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

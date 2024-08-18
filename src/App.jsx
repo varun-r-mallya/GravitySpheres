@@ -133,59 +133,61 @@ function App() {
 
   return (
     <div className="App">
-      <GraphView
-        data={graphData}
-        clicker={setClickedNode}
-        linkRemove={setLinkRemove}
-      />
-      <div
-        className="buttondiv"
-      >
-        <button
-          onClick={clickHandler}
-          className={`controls ${doubleClickedNode ? 'on' : ''}`}
+      <div className="CanvasArea">
+        <GraphView
+          data={graphData}
+          clicker={setClickedNode}
+          linkRemove={setLinkRemove}
+        />
+        <div
+          className="buttondiv"
         >
-          Connect Nodes
-        </button>
-        <button
-          onClick={() => setDirected(!directed)}
-          className={`controls ${directed ? 'on' : ''}`}
-        >
-          Directed
-        </button>
-        <button
-          onClick={() => setWeighted(!weighted)}
-          className={`controls ${weighted ? 'on' : ''}`}
-        >
-          Weighted
-        </button>
-        <button
-          onClick={orphanNodeAdd}
-          className="controls"
-        >
-          Orphan Node
-        </button>
-        {(node1 || node2) && (
-          <h4>
-            {" "}
-            Edge from: {node1 && node1.id} {node2 && `to:`} {node2 && node2.id}{" "}
-          </h4>
-        )}
-        <div style={{ display: "flex" }}>
-          {node1 && node2 && <button onClick={handleAddNode}>Connect</button>}
-          {weighted && node1 && node2 && (
-            <input
-              type="number"
-              value={weight}
-              onChange={(e) => setWeight((e.target.value))}
-              style={{ marginBottom: "10px" }}
-            />
-          )}
+          <button
+            onClick={clickHandler}
+            className={`controls ${doubleClickedNode ? 'on' : ''}`}
+          >
+            Connect Nodes
+          </button>
+          <button
+            onClick={() => setDirected(!directed)}
+            className={`controls ${directed ? 'on' : ''}`}
+          >
+            Directed
+          </button>
+          <button
+            onClick={() => setWeighted(!weighted)}
+            className={`controls ${weighted ? 'on' : ''}`}
+          >
+            Weighted
+          </button>
+          <button
+            onClick={orphanNodeAdd}
+            className="controls"
+          >
+            Orphan Node
+          </button>
           {(node1 || node2) && (
-            <button onClick={resetState} style={{ marginLeft: "10px" }}>
-              Cancel
-            </button>
+            <h4>
+              {" "}
+              Edge from: {node1?.id} {node2 && `to:`} {node2?.id}{" "}
+            </h4>
           )}
+          <div style={{ display: "flex" }}>
+            {node1 && node2 && <button onClick={handleAddNode}>Connect</button>}
+            {weighted && node1 && node2 && (
+              <input
+                type="number"
+                value={weight}
+                onChange={(e) => setWeight((e.target.value))}
+                style={{ marginBottom: "10px" }}
+              />
+            )}
+            {(node1 || node2) && (
+              <button onClick={resetState} style={{ marginLeft: "10px" }}>
+                Cancel
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
