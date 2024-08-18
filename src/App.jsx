@@ -2,38 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import GraphView from "./Graphview";
 
-function App() {
-  let GraphData = {
-    nodes: [
-      { id: "[1]"},
-      { id: "[2]"},
-      { id: "[3]"},
-    ],
-    links: [
-      {
-        source: "[1]",
-        target: "[2]",
-        id: "Link 1",
-        directed: false,
-        weight: 1,
-      },
-      {
-        source: "[2]",
-        target: "[3]",
-        id: "Link 2",
-        directed: false,
-        weight: 1,
-      },
-      {
-        source: "[3]",
-        target: "[1]",
-        id: "Link 3",
-        directed: false,
-        weight: 1,
-      },
-    ],
-  };
-
+function GraphDisplay(GraphData) {
   const [graphData, setGraphData] = useState(GraphData);
   const [clickedNode, setClickedNode] = useState(null);
   const [node1, setNode1] = useState(null);
@@ -192,6 +161,42 @@ function App() {
       </div>
     </div>
   );
+}
+
+
+function App() {
+  let GraphData = {
+    nodes: [
+      { id: "[1]"},
+      { id: "[2]"},
+      { id: "[3]"},
+    ],
+    links: [
+      {
+        source: "[1]",
+        target: "[2]",
+        id: "Link 1",
+        directed: false,
+        weight: 1,
+      },
+      {
+        source: "[2]",
+        target: "[3]",
+        id: "Link 2",
+        directed: false,
+        weight: 1,
+      },
+      {
+        source: "[3]",
+        target: "[1]",
+        id: "Link 3",
+        directed: false,
+        weight: 1,
+      },
+    ],
+  };
+
+  return GraphDisplay(GraphData);
 }
 
 export default App;
