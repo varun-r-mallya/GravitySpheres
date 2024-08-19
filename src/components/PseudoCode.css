@@ -1,0 +1,25 @@
+.tabs button {
+    margin-left: 10px;
+    padding: 10px;
+    background-color: ivory;
+    border: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+  
+.tabs .active {
+    font-weight: bold;
+    background-color: lightblue;
+}
+
+.code-space {
+    background-color: lightblue;
+    color: black;
+    margin: 10px;
+    margin-top: 0px;
+    padding: 10px;
+    padding-left: 20px;
+    border-radius: 10px;
+    border-top-left-radius: 0px;
+    font-weight: 200;
+}

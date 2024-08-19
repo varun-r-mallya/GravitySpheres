@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "bluebird": "^3.7.2",
     "classnames": "^2.5.1",
     "d3": "^7.9.0",
     "d3-force": "^3.0.0",

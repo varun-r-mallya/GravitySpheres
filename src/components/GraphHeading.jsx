@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import d3 from "d3";
 import _ from "lodash";
 import cx from "classnames";
 
@@ -34,73 +33,63 @@ export default class GraphHeading extends Component {
       running,
       startNodeId,
       setStartNodeId,
-      onChangeAlgorithm,
       onChangeGraph,
+      onChangeAlgorithm,
       onClickRun,
       onClickClear,
     } = this.props;
 
     return (
-      <div className="GraphHeading">
-        <h1>{title}</h1>
-        <form className="heading-form">
-          <label className="algorithm">
-            Algorithm{" "}
-            <select
-              className="algorithm"
-              value={selectedAlgorithm}
-              onChange={onChangeAlgorithm}
-            >
-              {algorithms.map((algo) => (
-                <option value={algo} key={algo}>
-                  {algo}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label className="example-graph">
-            Example Graph{" "}
-            <select
-              className="example-graph"
-              value={selectedExampleGraph}
-              onChange={onChangeGraph}
-            >
-              {exampleGraphs.map((graph) => (
-                <option value={graph} key={graph}>
-                  {graph}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label className="start-node">
-            Start Node{" "}
-            <select
-              className="start-node"
-              value={startNodeId}
-              onChange={setStartNodeId}
-            >
-              {nodes.map((node) => (
-                <option value={node.id} key={node.id}>
-                  {node.id}
-                </option>
-              ))}
-            </select>
-          </label>
-
+      <div className="graph-heading">
+        <h1>{this.props.title || "Breadth and Depth First Search"}</h1>
+        <form className="pure-form">
+          <label className="algorithm">Algorithm</label>
+          <select
+            className="algorithm"
+            value={selectedAlgorithm}
+            onChange={onChangeAlgorithm}
+          >
+            {algorithms.map((algo) => (
+              <option value={algo} key={algo}>
+                {algo}
+              </option>
+            ))}
+          </select>
+          <label className="example-graph">Example Graph</label>
+          <select
+            className="example-graph"
+            value={selectedExampleGraph}
+            onChange={onChangeGraph}
+          >
+            {Object.keys(exampleGraphs).map((key) => (
+              <option value={key} key={key}>
+                {key}
+              </option>
+            ))}
+          </select>
+          <label className="start-node">Start Node</label>
+          <select
+            className="start-node"
+            value={startNodeId}
+            onChange={setStartNodeId}
+          >
+            {nodes.map((node) => (
+              <option value={node.id} key={node.id}>
+                {node.id}
+              </option>
+            ))}
+          </select>
           <button
-            className={cx("form-button", {
+            className={cx("pure-button", {
               disabled: running,
               "button-primary": !running,
             })}
             onClick={onClickRun}
           >
-            {running ? "Running" : "Run"}
+            {running ? `Running ${selectedAlgorithm}` : "Run"}
           </button>
-
           <button
-            className={cx("form-button", {
+            className={cx("pure-button", {
               disabled: running,
               "button-secondary": !running,
             })}

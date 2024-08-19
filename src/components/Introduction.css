@@ -1,0 +1,19 @@
+.introduction {
+    text-align: center;
+    padding: 2px;
+    color: black;
+    font-weight: 100;
+}
+
+.title {
+    font-weight: 400;
+    font-size: 2em;
+}
+
+.instruction {
+    background-color: lightblue;
+    margin: 10px;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: left;
+}

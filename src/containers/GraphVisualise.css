@@ -1,0 +1,10 @@
+.graph-visualise {
+    display: flex;
+    width: 100vw;
+    justify-content: start;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    color: black;
+}

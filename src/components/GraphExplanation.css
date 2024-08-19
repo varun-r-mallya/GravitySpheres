@@ -1,0 +1,26 @@
+.explanation {
+    background-color: lightblue;
+    width: 45vw;
+    overflow: hidden;
+    padding: 2px;
+    height: 100vh;
+    font-weight: 100;
+
+}
+
+.explanation h2 {
+    font-weight: 400;
+    font-size: 2em;
+    padding-left: 20px;
+}
+
+.explanation ul {
+    padding: 1vh 1vw;
+    list-style: none;
+    overflow-y: scroll;
+    max-height: inherit;
+}
+
+.explanation li {
+    font-size: 0.8rem;
+}

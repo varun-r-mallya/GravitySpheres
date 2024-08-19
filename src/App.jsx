@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import GraphView from "./Graphview";
+import GraphView from "./components/Graphview";
 
 function GraphDisplay(GraphData) {
   const [graphData, setGraphData] = useState(GraphData);
